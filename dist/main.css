@@ -3,9 +3,16 @@
   padding: 0; }
   .container #create-article-form .dinngo-header {
     height: 39px;
-    background-image: linear-gradient(to bottom, #133364, #036ad8); }
+    background-image: linear-gradient(to bottom, #133364, #036ad8);
+    display: -webkit-flex;
+    align-items: center; }
     .container #create-article-form .dinngo-header .logo-img {
-      background-image: url(img/logo.svg); }
+      background-image: url(img/logo.svg);
+      background-repeat: no-repeat;
+      background-position: 50%;
+      width: 40px;
+      height: 40px;
+      margin: 0 10px 0 14px; }
     .container #create-article-form .dinngo-header .header-title {
       width: 63px;
       height: 22px;
@@ -102,12 +109,14 @@
       .container #create-article-form .table-block .table-container .buy-orders .table-row .colume-total .group_0, .container #create-article-form .table-block .table-container .sell-orders .table-row .colume-total .group_0 {
         opacity: 0.5;
         color: #ffffff; }
+        .container #create-article-form .table-block .table-container .buy-orders .table-row .colume-total .group_0.white, .container #create-article-form .table-block .table-container .sell-orders .table-row .colume-total .group_0.white {
+          opacity: 1; }
       .container #create-article-form .table-block .table-container .buy-orders .table-row .colume-total .group_2, .container #create-article-form .table-block .table-container .sell-orders .table-row .colume-total .group_2 {
         margin: 0; }
     .container #create-article-form .table-block .table-container .buy-orders {
       margin-top: 2px; }
       .container #create-article-form .table-block .table-container .buy-orders .bar-chart {
-        background-color: #f46361; }
+        background-color: #37a49c; }
     .container #create-article-form .table-block .table-container .final-price {
       text-align: center;
       padding: 5px 0; }
@@ -121,6 +130,10 @@
         letter-spacing: 0.4px;
         text-align: right;
         color: #37a49c; }
+        .container #create-article-form .table-block .table-container .final-price .price.green {
+          color: #37a49c; }
+        .container #create-article-form .table-block .table-container .final-price .price.red {
+          color: #f46361; }
       .container #create-article-form .table-block .table-container .final-price .usd-price {
         width: 58px;
         height: 14px;
@@ -129,5 +142,5 @@
         letter-spacing: 0.3px;
         color: #ffffff; }
     .container #create-article-form .table-block .table-container .sell-orders .bar-chart {
-      background-color: #37a49c; }
+      background-color: #f46361; }
 

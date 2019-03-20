@@ -20,7 +20,6 @@ class TableContent extends React.Component {
             if (this.props.ColumnData.state){
                 className["gray"] = columnData[3] !== undefined && index !== 4 ? columnData[4] !== '00' : false;
             }else{
-                className["gray"] = false;
                 className["white"] = true;
             }
             
