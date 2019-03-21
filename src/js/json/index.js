@@ -35,12 +35,13 @@ const splitData = (data) => {
     return pointArray.filter(Boolean)
 }
 
-const doPercent = (type, newOrder, data) => {
-    if (type === 'buy') {
-        return ((parseFloat(newOrder.total) + parseFloat(data.total)) / buy_total) * 1000
-    } else {
-        return ((parseFloat(newOrder.total) + parseFloat(data.total)) / sell_total) * 1000
-    }
+const doPercent = (type, orders) => {
+    let totalData = type === 'Buy' ? buy_total : sell_total;
+    let showOrderTotal = 0;
+    orders.forEach((object) => {
+        showOrderTotal += parseFloat(object.total);
+    });
+    return (showOrderTotal / totalData) * 1000
 }
 
 const doOrderData = (data) => {
@@ -59,35 +60,58 @@ const getRandom = function (n) {
     return Math.floor(Math.random() * n);
 };
 
-const getRandomArrayElements = function (orignalData, orderData, type) {
-    let randon = getRandom(8);
-    let orderRandon = getRandom(orderData.length);
-    let newOrder = orderData[orderRandon];
-    orignalData.splice(randon, 1, newOrder);
-    return orignalData.map((object) => {
-        let newObject = {
-            price: Array.isArray(object.price) ? object.price.join('') : object.price,
-            amount: object.amount,
-            total: Array.isArray(object.total) ? object.total.join('') : object.total,
-            state: object.state ? true : false
-        };
-        newObject['percent'] = doPercent(type, newOrder, newObject);
-        return newObject
+let isStart = true;
+let buyOrderData = [] ;
+let sellOrderData = [];
+let buyOrderIndex = 7;
+let sellOrderIndex = 7;
+
+const getNextElements = function (type, data) {
+    let ordersData;
+    let newOrderData;
+    switch (type){
+        case 'Buy':
+            if (data.length === 0) {
+                ordersData = dataJson.Buy.slice(0, 8);
+                buyOrderIndex++;
+            }else{
+                newOrderData = dataJson.Buy[buyOrderIndex];
+                buyOrderData.shift();
+                buyOrderData.push(newOrderData);
+                ordersData = buyOrderData;
+                buyOrderIndex++;
+            }
+            break;
+        case 'Sell':
+            if (data.length === 0) {
+                ordersData = dataJson.Sell.slice(0, 8);
+                sellOrderIndex++;
+            } else {
+                newOrderData = dataJson.Sell[sellOrderIndex];
+                sellOrderData.shift();
+                sellOrderData.push(newOrderData)
+                ordersData = sellOrderData;
+                sellOrderIndex++;
+            }
+            break;
+    }
+    ordersData = ordersData.map((object, index) => {
+        object['percent'] = doPercent(type, ordersData.slice(index))
+        return object
     });
+    type === "Buy" ? buyOrderData = ordersData : sellOrderData = ordersData;
+    return ordersData
 }
 
-
-export const getBuyOrderData = (orignalData) => {
-    let newOrderData = orignalData.length === 0 ? dataJson.Buy.slice(0, 8) : getRandomArrayElements(orignalData, dataJson.Buy, "buy");
-    let orderData = newOrderData.sort((a, b) => {
+export const getBuyOrderData = (data) => {
+    let orderData = getNextElements("Buy", data).sort((a, b) => {
         return parseFloat(a.price) - parseFloat(b.price)
     });
     return doOrderData(orderData)
 }
 
-export const getSellOrderData = (orignalData) => {
-    let newOrderData = orignalData.length === 0 ? dataJson.Buy.slice(0, 8) : getRandomArrayElements(orignalData, dataJson.Sell, "sell");
-    let orderData = newOrderData.sort((a, b) => {
+export const getSellOrderData = (data) => {
+    let orderData = getNextElements("Sell", data).sort((a, b) => {
         return parseFloat(b.price) - parseFloat(a.price)
     });
     return doOrderData(orderData)
